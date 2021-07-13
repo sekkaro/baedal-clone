@@ -1,6 +1,10 @@
 package fastcampus.aop.part4.chapter06.di
 
+import fastcampus.aop.part4.chapter06.data.repository.DefaultRestaurantRepository
+import fastcampus.aop.part4.chapter06.data.repository.RestaurantRepository
 import fastcampus.aop.part4.chapter06.screen.main.home.HomeViewModel
+import fastcampus.aop.part4.chapter06.screen.main.home.restaurant.RestaurantCategory
+import fastcampus.aop.part4.chapter06.screen.main.home.restaurant.RestaurantListViewModel
 import fastcampus.aop.part4.chapter06.screen.main.my.MyViewModel
 import fastcampus.aop.part4.chapter06.util.provider.DefaultResourcesProvider
 import fastcampus.aop.part4.chapter06.util.provider.ResourcesProvider
@@ -13,6 +17,14 @@ val appModule = module {
 
     viewModel { HomeViewModel() }
     viewModel { MyViewModel() }
+    viewModel { (restaurantCategory: RestaurantCategory) ->
+        RestaurantListViewModel(
+            restaurantCategory,
+            get()
+        )
+    }
+
+    single<RestaurantRepository> { DefaultRestaurantRepository(get(), get()) }
 
     single { provideGsonConvertFactory() }
     single { buildOkHttpClient() }
